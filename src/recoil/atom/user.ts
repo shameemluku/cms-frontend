@@ -1,13 +1,6 @@
 import { atom } from "recoil";
+import { IUserDetails, UserState } from "../../types/user";
 
-export type UserState = {
-  email: string;
-  id: string;
-  last_logged_in: Date | null;
-  name: string;
-  role: string;
-  username: string;
-};
 
 export const userState = atom<UserState | null>({
   key: "userState",
@@ -19,29 +12,12 @@ export const userLoadingState = atom({
   default: true,
 });
 
-interface EducationDetail {
-  education_type: string;
-  name_insititution: string;
-  edu_grade: string;
-}
+export const userDetailsLoadingState = atom({
+  key: "userDetailsLoadingState",
+  default: true,
+});
 
-interface ProDetail {
-  company_name: string;
-  designation: string;
-}
-
-export interface FormState {
-  first_name: string;
-  last_name: string;
-  address: string;
-  gender: string;
-  id_proof: string;
-  education_details: EducationDetail[];
-  pro_details: ProDetail[];
-  [key: string]: any;
-}
-
-export const userDetailState = atom<FormState>({
+export const userDetailState = atom<IUserDetails>({
   key: "userDetailState",
   default: {
     first_name: "",
@@ -50,7 +26,7 @@ export const userDetailState = atom<FormState>({
     gender: "",
     id_proof: "",
     education_details: [
-      { education_type: "", name_insititution: "", edu_grade: "" },
+      { education_type: "", name_institution: "", edu_grade: "" },
     ],
     pro_details: [{ company_name: "", designation: "" }],
   },

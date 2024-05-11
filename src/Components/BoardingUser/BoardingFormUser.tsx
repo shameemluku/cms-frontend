@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from "react";
-import "../../styles/boarding.css";
-import { useRecoilState } from "recoil";
-import { configLoadingState, configState } from "../../recoil/atom/form";
-import GenerateField from "../Boarding/GenerateField";
 import AddIcon from "@mui/icons-material/Add";
+import React, { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import compLogo from "../../assets/compLogo.png";
+import { configLoadingState, configState } from "../../recoil/atom/form";
+import { userDetailState, userState } from "../../recoil/atom/user";
+import "../../styles/boarding.css";
 import { Field, FormData } from "../../types/form";
-import { FormState, userDetailState } from "../../recoil/atom/user";
+import { IUserDetails } from "../../types/user";
+import GenerateField from "../Boarding/GenerateField";
+import useDetails from "../../hook/useDetails";
 
 const RegistrationForm: React.FC = () => {
+  const [user] = useRecoilState(userState);
   const [active, setActive] = useState(0);
   const [config, setConfig] = useRecoilState<FormData[]>(configState);
   const [loadingConfig] = useRecoilState<Boolean>(configLoadingState);
   const [userDetails, setUserDetails] =
-    useRecoilState<FormState>(userDetailState);
+    useRecoilState<IUserDetails>(userDetailState);
+  const { getUserDetails } = useDetails();
+
   const [fieldErrors, setErrors] = useState<any>({});
 
   const nextStep = () => {
@@ -109,8 +115,10 @@ const RegistrationForm: React.FC = () => {
   };
 
   useEffect(() => {
-    console.log(userDetails);
-  }, [userDetails]);
+    if (user?._id) {
+      getUserDetails(user?._id);
+    }
+  }, [user]);
 
   return (
     <div className="board-form-container">
@@ -118,7 +126,7 @@ const RegistrationForm: React.FC = () => {
         <div className="form">
           <div className="left-side">
             <div className="left-heading">
-              <h3>Shameem</h3>
+              <img src={compLogo} alt="Logo" width={"150"} />
             </div>
             <div className="steps-content">
               <h3>
@@ -129,7 +137,6 @@ const RegistrationForm: React.FC = () => {
               >
                 Enter your personal information to get closer to companies.
               </p>
-              {/* Repeat for other steps */}
             </div>
             <ul className="progress-bar">
               {config?.map((item: FormData, index) => {
@@ -184,7 +191,7 @@ const RegistrationForm: React.FC = () => {
                             errorTxt={error}
                             extraLabel={
                               field?.name === "id_proof_upload"
-                                ? (userDetails?.id_proof || "")
+                                ? userDetails?.id_proof || ""
                                 : null
                             }
                             fileType={config[active]?.file_types || null}
@@ -221,7 +228,7 @@ const RegistrationForm: React.FC = () => {
                                 ? { company_name: "", designation: "" }
                                 : {
                                     education_type: "",
-                                    name_insititution: "",
+                                    name_institution: "",
                                     edu_grade: "",
                                   },
                             ],
@@ -234,7 +241,14 @@ const RegistrationForm: React.FC = () => {
                   )}
               </div>
               <div className="buttons button_space">
-                <button className="back_button" onClick={prevStep}>
+                <button
+                  className="back_button"
+                  onClick={prevStep}
+                  disabled={active === 0}
+                  style={{
+                    opacity: active === 0 ? 0.2 : 1,
+                  }}
+                >
                   Back
                 </button>
                 <button className="next_button" onClick={nextStep}>

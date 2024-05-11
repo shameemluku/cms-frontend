@@ -32,7 +32,7 @@ interface FieldState {
 }
 
 const BoardingForm: React.FC = ({}) => {
-  const [config, setConfig] = useRecoilState<FormData[]>(configState);
+  const [config] = useRecoilState<FormData[]>(configState);
   const [formItems, setFormItems] = useState<Item[]>([]);
   const [tempState, setTempState] = useState<Item[]>([]);
   const [openField, setOpenField] = useState<FieldState>({
