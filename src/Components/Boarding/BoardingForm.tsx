@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Fab, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
   DragDropContext,
@@ -11,6 +11,8 @@ import FieldItemCustomization from "./BoardingItem";
 import { useRecoilState } from "recoil";
 import { configState } from "../../recoil/atom/form";
 import { FormData } from "../../types/form";
+import SaveIcon from "@mui/icons-material/Save";
+import ReplayIcon from "@mui/icons-material/Replay";
 
 interface Item {
   form_id: string;
@@ -25,16 +27,17 @@ interface Item {
 
 interface FieldState {
   open: boolean;
-  form_id: string | null;
+  form_id: string;
   title: string;
 }
 
 const BoardingForm: React.FC = ({}) => {
   const [config, setConfig] = useRecoilState<FormData[]>(configState);
   const [formItems, setFormItems] = useState<Item[]>([]);
+  const [tempState, setTempState] = useState<Item[]>([]);
   const [openField, setOpenField] = useState<FieldState>({
     open: false,
-    form_id: null,
+    form_id: "",
     title: "",
   });
   const onDragEnd = (result: DropResult) => {
@@ -49,14 +52,14 @@ const BoardingForm: React.FC = ({}) => {
   };
 
   useEffect(() => {
-    setFormItems(
-      config?.map((item) => ({
-        form_id: item?.form_id,
-        title: item?.title,
-        description: item?.description,
-        theme: item?.theme,
-      }))
-    );
+    let formatted = config?.map((item) => ({
+      form_id: item?.form_id,
+      title: item?.title,
+      description: item?.description,
+      theme: item?.theme,
+    }));
+    setFormItems(formatted);
+    setTempState([...formatted]);
   }, [config]);
 
   return (
@@ -133,12 +136,28 @@ const BoardingForm: React.FC = ({}) => {
         </DragDropContext>
       </div>
 
+      {JSON.stringify(formItems) !== JSON.stringify(tempState) && (
+        <div className="flex gap-[10px] fixed right-[20px] bottom-[20px]">
+          <Fab
+            aria-label="add"
+            onClick={() => {
+              setFormItems([...tempState]);
+            }}
+          >
+            <ReplayIcon />
+          </Fab>
+          <Fab color="primary" aria-label="add">
+            <SaveIcon />
+          </Fab>
+        </div>
+      )}
+
       <FieldItemCustomization
         open={openField?.open}
         handleClose={() => {
           setOpenField({
             open: false,
-            form_id: null,
+            form_id: "",
             title: "",
           });
         }}

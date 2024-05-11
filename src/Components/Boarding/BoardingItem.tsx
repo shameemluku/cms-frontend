@@ -14,13 +14,15 @@ import Typography from "@mui/material/Typography";
 import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
-import { fields } from "../../Constants/dummy";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 import { Checkbox, FormControlLabel, FormGroup, Grid } from "@mui/material";
 import GenerateField from "./GenerateField";
+import { getFormFields, updateFormField } from "../../api/form";
+import SaveIcon from "@mui/icons-material/Save";
+import ReplayIcon from "@mui/icons-material/Replay";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -34,7 +36,7 @@ const Transition = React.forwardRef(function Transition(
 interface FieldItemCustomizationProps {
   open: boolean;
   handleClose: () => void;
-  form_id: string | null;
+  form_id: string;
   title: string;
 }
 
@@ -42,14 +44,27 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
   open,
   handleClose,
   form_id,
-  title
+  title,
 }) => {
   const [formFields, setFormFields] = React.useState<any>([]);
-  const handleLoadFormElements = () => {
-    let field = fields?.find((item) => item?.parent_id === form_id);
-    console.log(field);
+  const [tempState, setTempState] = React.useState<any>([]);
+  const [loading, setLoading] = React.useState<string | null>(null);
 
-    setFormFields(field || []);
+  const handleLoadFormElements = async () => {
+    try {
+      setLoading("FETCH_FIELDS");
+      const { data: response } = await getFormFields(form_id);
+      const { data } = response;
+      delete data?._id;
+      delete data?.is_active;
+      delete data?.config_id;
+      delete data?.__v;
+      setTempState({ ...(data || {}) });
+      setFormFields(data || {});
+    } catch (error) {
+      alert("Error");
+    }
+    setLoading(null);
   };
 
   const onDragEnd = (result: DropResult) => {
@@ -59,7 +74,6 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
     const newFormItems = Array.from(state?.fields || []);
     const [removed] = newFormItems.splice(result.source.index, 1);
     newFormItems.splice(result.destination.index, 0, removed);
-    console.log(newFormItems);
     state.fields = newFormItems;
     setFormFields({ ...state });
   };
@@ -75,6 +89,19 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
       [key]: event.target.checked,
     };
     setFormFields({ ...formFields, fields: updatedFields }); // Update the formFields state
+  };
+
+  const handleUpdateField = async () => {
+    try {
+      setLoading("UPDATE_FIELDS");
+      const { data } = await updateFormField(formFields);
+      if (data?.status) {
+        alert("Done");
+      }
+    } catch (error) {
+      alert("Error");
+    }
+    setLoading(null);
   };
 
   const FieldComp = ({
@@ -130,7 +157,9 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
   };
 
   React.useEffect(() => {
-    handleLoadFormElements();
+    if (form_id) {
+      handleLoadFormElements();
+    }
   }, [form_id]);
 
   return (
@@ -154,8 +183,25 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               {title}
             </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              save
+            <Button
+              color="inherit"
+              onClick={() => {
+                setFormFields({ ...tempState });
+              }}
+              disabled={
+                JSON.stringify(formFields) === JSON.stringify(tempState)
+              }
+            >
+              <ReplayIcon sx={{ fontSize: 18, mr: 0.5 }} /> Reset
+            </Button>
+            <Button
+              color="inherit"
+              onClick={handleUpdateField}
+              disabled={
+                JSON.stringify(formFields) === JSON.stringify(tempState)
+              }
+            >
+              <SaveIcon sx={{ fontSize: 18, mr: 0.5 }} /> save
             </Button>
           </Toolbar>
         </AppBar>

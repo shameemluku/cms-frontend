@@ -27,3 +27,15 @@ export interface FormData {
   max_file_size: number | null;
   file_types: string[] | null;
 }
+
+export interface FieldPayloadType {
+  parent_id: string;
+  fields: Field[];
+  file_included: boolean;
+  other_config: {
+    loop: boolean;
+    limit: number | null;
+    max_file_size: number | null;
+    file_types: string[] | null;
+  };
+}
