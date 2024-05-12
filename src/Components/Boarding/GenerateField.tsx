@@ -14,6 +14,7 @@ const GenerateField = ({
   errorTxt,
   extraLabel,
   fileType,
+  maxSize
 }: {
   field: Record<string, any>;
   value?: any;
@@ -22,6 +23,7 @@ const GenerateField = ({
   errorTxt?: string;
   extraLabel?: string | null;
   fileType?: Array<string> | null;
+  maxSize?: number;
 }) => {
   const { type, label } = field;
   return type === "text" || type === "number" ? (
@@ -114,6 +116,7 @@ const GenerateField = ({
             });
           }
         }}
+        maxSize={maxSize}
       />
       <span className="text-[red] text-[12px]">{errorTxt}</span>
     </div>

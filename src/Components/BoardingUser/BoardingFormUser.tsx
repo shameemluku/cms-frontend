@@ -252,6 +252,7 @@ const RegistrationForm: React.FC = () => {
                                       : null
                                   }
                                   fileType={config[active]?.file_types || null}
+                                  maxSize={config[active]?.max_file_size || 5}
                                 />
                               ) : null;
                             })}

@@ -6,9 +6,10 @@ const fileTypes: string[] = ["JPG", "JPEG", "PNG", "GIF", "PDF"];
 interface DragDropProps {
   setFile: (base64: string, fileName: string) => void;
   customType?: string[];
+  maxSize?: number;
 }
 
-function DragDrop({ setFile, customType }: DragDropProps) {
+function DragDrop({ setFile, customType, maxSize }: DragDropProps) {
   const handleChange = async (file: File) => {
     const base64 = await getBase64(file);
     setFile(base64, file.name);
@@ -20,6 +21,7 @@ function DragDrop({ setFile, customType }: DragDropProps) {
       handleChange={handleChange}
       name="file"
       types={customType || fileTypes}
+      maxSize={maxSize}
     />
   );
 }

@@ -172,10 +172,6 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
     }
   }, [form_id]);
 
-  React.useEffect(() => {
-    console.log(formFields);
-  }, [formFields]);
-
   return (
     <React.Fragment>
       <Dialog
@@ -333,6 +329,9 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
                               field={field}
                               fileType={
                                 formFields?.other_config?.file_types || null
+                              }
+                              maxSize={
+                                formFields?.other_config?.max_file_size || 3
                               }
                             />
                           </Grid>
