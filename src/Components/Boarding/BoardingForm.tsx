@@ -1,4 +1,4 @@
-import { Fab, Grid } from "@mui/material";
+import { CircularProgress, Fab, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
   DragDropContext,
@@ -13,8 +13,11 @@ import { configState } from "../../recoil/atom/form";
 import { FormData } from "../../types/form";
 import SaveIcon from "@mui/icons-material/Save";
 import ReplayIcon from "@mui/icons-material/Replay";
+import { toast } from "react-toastify";
+import { errorFormatter } from "../../Utils/formatter";
+import { updateFormData } from "../../api/form";
 
-interface Item {
+export interface Item {
   form_id: string;
   title: string;
   description: string;
@@ -35,6 +38,7 @@ const BoardingForm: React.FC = ({}) => {
   const [config] = useRecoilState<FormData[]>(configState);
   const [formItems, setFormItems] = useState<Item[]>([]);
   const [tempState, setTempState] = useState<Item[]>([]);
+  const [loading, setLoading] = useState<string | null>(null);
   const [openField, setOpenField] = useState<FieldState>({
     open: false,
     form_id: "",
@@ -49,6 +53,21 @@ const BoardingForm: React.FC = ({}) => {
     console.log(newFormItems);
 
     setFormItems(newFormItems);
+  };
+
+  const handleUpdateForm = async () => {
+    try {
+      setLoading("UPDATE_FORM");
+      const { data } = await updateFormData({
+        form_data: formItems,
+      });
+      if (data?.status) {
+        toast.success("Form updated successfully!!");
+      }
+    } catch (error) {
+      toast.error(errorFormatter(error));
+    }
+    setLoading(null);
   };
 
   useEffect(() => {
@@ -106,7 +125,7 @@ const BoardingForm: React.FC = ({}) => {
                         }}
                       >
                         <div
-                          className={`border-l-[4px] border-[${item.theme}] card-shadow rounded-[4px] bg-[white]`}
+                          className={`border-l-[4px] border-[${item.theme}] card-shadow rounded-[4px] bg-[white] h-[250px]`}
                         >
                           <div>
                             <div
@@ -143,11 +162,23 @@ const BoardingForm: React.FC = ({}) => {
             onClick={() => {
               setFormItems([...tempState]);
             }}
+            disabled={loading === "UPDATE_FORM"}
           >
             <ReplayIcon />
           </Fab>
-          <Fab color="primary" aria-label="add">
-            <SaveIcon />
+          <Fab
+            color="primary"
+            aria-label="add"
+            onClick={() => {
+              handleUpdateForm();
+            }}
+            disabled={loading === "UPDATE_FORM"}
+          >
+            {loading === "UPDATE_FORM" ? (
+              <CircularProgress size={20} />
+            ) : (
+              <SaveIcon />
+            )}
           </Fab>
         </div>
       )}

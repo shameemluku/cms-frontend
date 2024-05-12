@@ -11,11 +11,16 @@ const PublicRoute: React.FC = () => {
     return <AuthLoading />;
   }
 
-
   if (user) {
-    return <Navigate to="" state={{ from: pathname }} replace />;
+    return (
+      <Navigate
+        to={Number(user?.role) === 2 ? "" : "/admin"}
+        state={{ from: pathname }}
+        replace
+      />
+    );
   }
-  
+
   return <Outlet />;
 };
 

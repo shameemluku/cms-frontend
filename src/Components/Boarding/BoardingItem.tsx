@@ -18,11 +18,21 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
-import { Checkbox, FormControlLabel, FormGroup, Grid } from "@mui/material";
+import {
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  Slider,
+} from "@mui/material";
 import GenerateField from "./GenerateField";
 import { getFormFields, updateFormField } from "../../api/form";
 import SaveIcon from "@mui/icons-material/Save";
 import ReplayIcon from "@mui/icons-material/Replay";
+import { errorFormatter } from "../../Utils/formatter";
+import { toast } from "react-toastify";
+import DataTypeSelect from "../DataTypeSelect";
+import AddIcon from "@mui/icons-material/Add";
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
@@ -96,10 +106,10 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
       setLoading("UPDATE_FIELDS");
       const { data } = await updateFormField(formFields);
       if (data?.status) {
-        alert("Done");
+        toast.success("Fields updated successfully!!");
       }
     } catch (error) {
-      alert("Error");
+      toast.error(errorFormatter(error));
     }
     setLoading(null);
   };
@@ -162,6 +172,10 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
     }
   }, [form_id]);
 
+  React.useEffect(() => {
+    console.log(formFields);
+  }, [formFields]);
+
   return (
     <React.Fragment>
       <Dialog
@@ -213,7 +227,7 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
-                <div className="left-section bg-[#f5f7fd]">
+                <div className="left-section bg-[#f5f7fd] relative">
                   <div className="flex flex-col gap-[10px]">
                     {formFields?.fields?.map(
                       (field: Record<string, any>, index: number) => (
@@ -236,6 +250,78 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
                     )}
                   </div>
                   {provided.placeholder}
+
+                  {formFields?.parent_id === "doc_4" && (
+                    <div className="absolute bottom-[20px] w-[90%]">
+                      <Grid container gap={3}>
+                        <Grid xs={5} item>
+                          <DataTypeSelect
+                            value={formFields?.other_config?.file_types || []}
+                            onChange={(value: Array<string>) => {
+                              let state = { ...formFields };
+                              state.other_config = {
+                                ...state.other_config,
+                                file_types: value || [],
+                              };
+                              setFormFields(state);
+                            }}
+                          />
+                        </Grid>
+                        <Grid xs={5} item>
+                          <span className="text-[12px]">Max file size</span>
+                          <Slider
+                            aria-label="Temperature"
+                            defaultValue={
+                              formFields?.other_config?.max_file_size || 5
+                            }
+                            getAriaValueText={(value: number) => {
+                              return `${value} mb`;
+                            }}
+                            valueLabelDisplay="auto"
+                            shiftStep={30}
+                            step={5}
+                            marks
+                            min={5}
+                            max={105}
+                            onChange={(_, value) => {
+                              let state = { ...formFields };
+                              state.other_config = {
+                                ...state.other_config,
+                                max_file_size: value || 5,
+                              };
+                              setFormFields(state);
+                            }}
+                          />
+                        </Grid>
+                      </Grid>
+                    </div>
+                  )}
+
+                  {formFields?.other_config?.loop && (
+                    <div className="absolute bottom-[20px] w-[50%]">
+                      <div>
+                        <span className="text-[12px]">Add more limit</span>
+                        <Slider
+                          aria-label="Temperature"
+                          defaultValue={formFields?.other_config?.limit || 5}
+                          valueLabelDisplay="auto"
+                          shiftStep={30}
+                          step={1}
+                          marks
+                          min={1}
+                          max={5}
+                          onChange={(_, value) => {
+                            let state = { ...formFields };
+                            state.other_config = {
+                              ...state.other_config,
+                              limit: value || 3,
+                            };
+                            setFormFields(state);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="right-section">
                   <Grid container gap={1}>
@@ -243,11 +329,24 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
                       (field: Record<string, any>, index: number) =>
                         field?.enabled && (
                           <Grid item xs={12} key={index}>
-                            <GenerateField field={field} />
+                            <GenerateField
+                              field={field}
+                              fileType={
+                                formFields?.other_config?.file_types || null
+                              }
+                            />
                           </Grid>
                         )
                     )}
                   </Grid>
+
+                  {formFields?.other_config?.loop && (
+                    <div className="flex justify-end mt-3">
+                      <button className="text-[15px] text-[gray]">
+                        <AddIcon /> Add more
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             )}

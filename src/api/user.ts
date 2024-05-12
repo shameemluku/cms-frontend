@@ -1,9 +1,9 @@
 import axios from "axios";
 // import { URL, environment } from "../config";
 
-// export const baseURL = URL[environment];
+export const baseURL ="http://localhost:5000/api";
 const API = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL,
   withCredentials: true,
 });
 
@@ -16,3 +16,4 @@ export const fetchUserDetails = (id: string) =>
   API.get(`/user/get-user-details?user_id=${id}`);
 export const updateUserDetails = (payload: Object) =>
   API.patch(`/user/update-user-details`, payload);
+export const fetchUsers = () => API.get(`/user/get-all-users`);

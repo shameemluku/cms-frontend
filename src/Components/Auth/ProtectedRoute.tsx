@@ -20,7 +20,7 @@ const ProtectedRoute = ({
 
   if (roleRequired && Number(user.role) !== Number(roleRequired)) {
     // Redirect or show unauthorized message based on your requirement
-    return <Navigate to="/unauthorized" />;
+    return <Navigate to={Number(user.role) === 2 ? "" : "/admin"} />;
   }
 
   return <Outlet />;

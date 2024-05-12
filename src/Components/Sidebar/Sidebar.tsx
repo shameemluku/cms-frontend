@@ -9,12 +9,26 @@ import "./SideNavBar.css";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { userState } from "../../recoil/atom/user";
+import useAuth from "../../hook/useAuth";
+import { errorFormatter } from "../../Utils/formatter";
+import { toast } from "react-toastify";
 
 const SideNavBar = ({ children, active, isClosed }: any) => {
   const [user] = useRecoilState(userState);
   const [open, setOpen] = useState(true);
   const navigate = useNavigate();
   //   const { logoutUser } = useAuth();
+
+  const { logoutUser } = useAuth();
+  const handleLogoutClick = async () => {
+    try {
+      // setLoading("LOGOUT");
+      await logoutUser();
+    } catch (error) {
+      toast.error(errorFormatter(error));
+    }
+    // setLoading(null);
+  };
 
   useEffect(() => {
     if (isClosed) {
@@ -69,7 +83,7 @@ const SideNavBar = ({ children, active, isClosed }: any) => {
           <li>
             <a
               onClick={() => {
-                navigate("/tools");
+                navigate("/admin/users");
               }}
               className={`${active === "users" && "sidebar-active"}`}
             >
@@ -92,9 +106,9 @@ const SideNavBar = ({ children, active, isClosed }: any) => {
               </div>
             </div>
             <i
-              className="bx bx-log-out pointer"
+              className="bx bx-log-out cursor-pointer"
               id="log_out"
-              //   onClick={() => logoutUser()}
+                onClick={() => handleLogoutClick()}
             >
               <LogoutOutlinedIcon sx={{ fontSize: "20px" }} />
             </i>

@@ -13,3 +13,5 @@ export const getFormFields = (parent_id: string) =>
   API.get(`/form/get-fields?parent_id=${parent_id}`);
 export const updateFormField = (body: FieldPayloadType) =>
   API.post(`/form/create-field-config`, body);
+export const updateFormData = (body: Object) =>
+  API.post(`/form/create-form`, body);
