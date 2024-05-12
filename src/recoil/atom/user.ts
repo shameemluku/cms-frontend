@@ -17,6 +17,11 @@ export const userDetailsLoadingState = atom({
   default: true,
 });
 
+export const userBoardedState = atom({
+  key: "userBoardedState",
+  default: false,
+});
+
 export const userDetailState = atom<IUserDetails>({
   key: "userDetailState",
   default: {

@@ -63,6 +63,7 @@ const GenerateField = ({
         row
         aria-labelledby="demo-row-radio-buttons-group-label"
         name="row-radio-buttons-group"
+        {...(value ? { value } : {})}
       >
         {field?.values?.map((item: Record<string, any>) => (
           <FormControlLabel
@@ -114,6 +115,7 @@ const GenerateField = ({
           }
         }}
       />
+      <span className="text-[red] text-[12px]">{errorTxt}</span>
     </div>
   ) : null;
 };

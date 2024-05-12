@@ -14,3 +14,16 @@
   border: 1px solid #ccc; /* Optional: Add borders for clarity */
   padding: 20px;
 }
+
+
+/* Login */
+
+.confirm-holder {
+  height: 0px;
+  overflow: hidden;
+  transition: height 0.3s ease !important; /* Transition on height change */
+}
+
+.confirm-holder.expanded {
+  height: 75px; /* Define the expanded height */
+}

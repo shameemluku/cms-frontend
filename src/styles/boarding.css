@@ -29,6 +29,10 @@
   padding: 20px 30px;
   box-sizing: border-box;
 }
+
+.left-side-login{
+  width: 45% !important;
+}
 /*left-side-start*/
 .left-heading {
   color: #fff;

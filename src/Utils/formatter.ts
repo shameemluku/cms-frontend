@@ -14,3 +14,12 @@ export const getBase64 = (file: File): Promise<string> => {
     };
   });
 };
+
+export const errorFormatter = (error: any, msg?: string): string => {
+  return (
+    error?.response?.data?.message ||
+    error?.message ||
+    msg ||
+    "Some error occurred"
+  );
+};

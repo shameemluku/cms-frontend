@@ -46,17 +46,9 @@ export default function useFindUser() {
     }
 
     findUser();
-    console.log("hII");
     
   }, []);
 
-  // useEffect(()=>{
-  //     if(user){
-  //         localStorage.setItem("userData", JSON.stringify(user));
-  //     }else{
-  //         localStorage.removeItem("userData");
-  //     }
-  //   },[user])
 
   return {
     user,
