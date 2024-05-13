@@ -20,6 +20,7 @@ import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 import {
   Checkbox,
+  CircularProgress,
   FormControlLabel,
   FormGroup,
   Grid,
@@ -105,6 +106,7 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
     try {
       setLoading("UPDATE_FIELDS");
       const { data } = await updateFormField(formFields);
+      setTempState(formFields)
       if (data?.status) {
         toast.success("Fields updated successfully!!");
       }
@@ -211,7 +213,16 @@ const FullScreenDialog: React.FC<FieldItemCustomizationProps> = ({
                 JSON.stringify(formFields) === JSON.stringify(tempState)
               }
             >
-              <SaveIcon sx={{ fontSize: 18, mr: 0.5 }} /> save
+              {loading === "UPDATE_FIELDS" ? (
+                <>
+                  <CircularProgress sx={{ color: "white", mr: 1 }} size={15} />{" "}
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <SaveIcon sx={{ fontSize: 18, mr: 0.5 }} /> save
+                </>
+              )}
             </Button>
           </Toolbar>
         </AppBar>

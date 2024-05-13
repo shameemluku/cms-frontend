@@ -62,6 +62,7 @@ const BoardingForm: React.FC = ({}) => {
         form_data: formItems,
       });
       if (data?.status) {
+        setTempState(formItems)
         toast.success("Form updated successfully!!");
       }
     } catch (error) {
