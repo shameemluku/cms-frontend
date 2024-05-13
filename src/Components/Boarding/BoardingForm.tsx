@@ -1,4 +1,4 @@
-import { CircularProgress, Fab, Grid } from "@mui/material";
+import { Button, CircularProgress, Fab, Grid } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import {
   DragDropContext,
@@ -16,6 +16,7 @@ import ReplayIcon from "@mui/icons-material/Replay";
 import { toast } from "react-toastify";
 import { errorFormatter } from "../../Utils/formatter";
 import { updateFormData } from "../../api/form";
+import EditIcon from "@mui/icons-material/Edit";
 
 export interface Item {
   form_id: string;
@@ -62,7 +63,7 @@ const BoardingForm: React.FC = ({}) => {
         form_data: formItems,
       });
       if (data?.status) {
-        setTempState(formItems)
+        setTempState(formItems);
         toast.success("Form updated successfully!!");
       }
     } catch (error) {
@@ -126,7 +127,7 @@ const BoardingForm: React.FC = ({}) => {
                         }}
                       >
                         <div
-                          className={`border-l-[4px] border-[${item.theme}] card-shadow rounded-[4px] bg-[white] h-[250px]`}
+                          className={`relative border-l-[4px] border-[${item.theme}] card-shadow rounded-[4px] bg-[white] h-[250px]`}
                         >
                           <div>
                             <div
@@ -143,6 +144,20 @@ const BoardingForm: React.FC = ({}) => {
                                 {item.description}
                               </p>
                             </div>
+                          </div>
+                          <div className="absolute bottom-[10px] right-[10px]">
+                            <Button
+                              size="small"
+                              onClick={() => {
+                                setOpenField({
+                                  open: true,
+                                  form_id: item?.form_id,
+                                  title: item?.title,
+                                });
+                              }}
+                            >
+                              <EditIcon sx={{ fontSize: 15, mr: 0.5 }} /> Edit
+                            </Button>
                           </div>
                         </div>
                       </Grid>
