@@ -1,6 +1,3 @@
-Sure, here's the updated README content with the repository URL changed:
-
-```markdown
 # CMS Frontend
 
 This is the frontend application for a Content Management System (CMS) built using React and TypeScript.
@@ -10,8 +7,7 @@ This is the frontend application for a Content Management System (CMS) built usi
 To get started with this project, you need to clone the repository:
 
 ```bash
-git clone https://github.com/shameemluku/cms-frontend.git
-```
+git clone <repository-url>
 
 Once cloned, navigate to the project directory and install the dependencies:
 
@@ -80,3 +76,5 @@ npm run build
 
 Feel free to modify this README to include any additional information specific to your project or setup.
 ```
+
+You can copy this content and save it as `README.md` in your project directory.
