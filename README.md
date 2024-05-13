@@ -76,5 +76,3 @@ npm run build
 
 Feel free to modify this README to include any additional information specific to your project or setup.
 ```
-
-You can copy this content and save it as `README.md` in your project directory.
