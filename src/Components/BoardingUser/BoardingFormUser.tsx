@@ -27,7 +27,7 @@ const RegistrationForm: React.FC = () => {
   const [loading, setLoading] = useState<string | null>(null);
   const [active, setActive] = useState(0);
   const [config, setConfig] = useRecoilState<FormData[]>(configState);
-  const [loadingConfig] = useRecoilState<Boolean>(configLoadingState);
+  // const [loadingConfig] = useRecoilState<Boolean>(configLoadingState);
   const [userBoarded, setBoarded] = useRecoilState(userBoardedState);
   const [userDetails, setUserDetails] =
     useRecoilState<IUserDetails>(userDetailState);

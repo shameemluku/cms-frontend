@@ -1,30 +1,71 @@
-# React + TypeScript + Vite
+CMS Frontend
+This is the frontend application for a Content Management System (CMS) built using React and TypeScript.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Table of Contents
+Installation
+Usage
+Scripts
+Dependencies
+Dev Dependencies
+Installation
+To get started with this project, you need to clone the repository:
 
-Currently, two official plugins are available:
+bash
+Copy code
+git clone <repository-url>
+Once cloned, navigate to the project directory and install the dependencies:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+bash
+Copy code
+cd cms-frontend
+npm install
+Usage
+To run the development server:
 
-## Expanding the ESLint configuration
+bash
+Copy code
+npm run dev
+Open http://localhost:3000 to view it in the browser.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+To build the project for production:
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+bash
+Copy code
+npm run build
+Scripts
+dev: Runs the development server.
+build: Builds the project for production.
+lint: Lints the TypeScript files.
+preview: Previews the production build locally.
+Dependencies
+@emotion/react: ^11.11.4
+@emotion/styled: ^11.11.5
+@mui/icons-material: ^5.15.16
+@mui/material: ^5.15.16
+@mui/styled-engine-sc: ^6.0.0-alpha.18
+@types/react-beautiful-dnd: ^12.1.2
+axios: ^1.6.8
+hamburger-react: ^2.5.0
+react: ^18.2.0
+react-beautiful-dnd: ^13.1.1
+react-dom: ^18.2.0
+react-drag-drop-files: ^2.3.10
+react-router-dom: ^6.23.0
+react-toastify: ^10.0.5
+recoil: ^0.7.7
+styled-components: ^6.1.10
+Dev Dependencies
+@types/react: ^18.2.66
+@types/react-dom: ^18.2.22
+@typescript-eslint/eslint-plugin: ^7.2.0
+@typescript-eslint/parser: ^7.2.0
+@vitejs/plugin-react: ^4.2.1
+autoprefixer: ^10.4.19
+eslint: ^8.57.0
+eslint-plugin-react-hooks: ^4.6.0
+eslint-plugin-react-refresh: ^0.4.6
+postcss: ^8.4.38
+tailwindcss: ^3.4.3
+typescript: ^5.2.2
+vite: ^5.2.0
+Feel free to modify this README to include any additional information specific to your project or setup.
